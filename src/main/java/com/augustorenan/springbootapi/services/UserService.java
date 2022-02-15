@@ -14,7 +14,6 @@ import com.augustorenan.springbootapi.entities.User;
 import com.augustorenan.springbootapi.repositories.UserRepository;
 import com.augustorenan.springbootapi.services.exceptions.DatabaseException;
 import com.augustorenan.springbootapi.services.exceptions.ResourceNotFoundException;
-import com.augustorenan.springbootapi.services.exceptions.UserAlreadyExistsException;
 
 @Service
 public class UserService {
