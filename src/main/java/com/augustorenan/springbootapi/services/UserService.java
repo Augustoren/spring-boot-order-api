@@ -14,6 +14,7 @@ import com.augustorenan.springbootapi.entities.User;
 import com.augustorenan.springbootapi.repositories.UserRepository;
 import com.augustorenan.springbootapi.services.exceptions.DatabaseException;
 import com.augustorenan.springbootapi.services.exceptions.ResourceNotFoundException;
+import com.augustorenan.springbootapi.services.exceptions.UserAlreadyExistsException;
 
 @Service
 public class UserService {
@@ -31,30 +32,35 @@ public class UserService {
 	}
 
 	public User createUser(User user) {
-		return userRepository.save(user);
+		User usr = userRepository.findUserByEmail(user.getEmail());
+		if (user.equals(usr)) {
+			throw new UserAlreadyExistsException("User already exists.");
+		} else {
+			return userRepository.save(user);			
+		}
 	}
 
 	public void deleteUser(Long id) {
 		try {
-			userRepository.deleteById(id);			
-		} catch(EmptyResultDataAccessException e) {
+			userRepository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}
 	}
-	
+
 	public User updateUser(Long id, User user) {
 		User entity;
-		try{
+		try {
 			entity = userRepository.getById(id);
-			updateUserData(entity, user);			
+			updateUserData(entity, user);
 			return userRepository.save(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
 		}
 	}
-	
+
 	public void updateUserData(User entity, User user) {
 		entity.setFirstName(user.getFirstName());
 		entity.setLastName(user.getLastName());

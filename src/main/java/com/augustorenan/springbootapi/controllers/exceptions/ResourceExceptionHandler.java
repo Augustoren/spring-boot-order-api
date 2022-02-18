@@ -34,7 +34,7 @@ public class ResourceExceptionHandler {
 	
 	@ExceptionHandler(UserAlreadyExistsException.class)
 	public ResponseEntity<StandardError> userAlreadyExists(UserAlreadyExistsException e, HttpServletRequest request) {
-		String error = "Database Error";
+		String error = "Resource Error";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(status).body(err);
